@@ -17,8 +17,8 @@ test -z "$REP2" && fail "Missing REP2"
 IP1="7.7.7.1"
 IP2="7.7.7.2"
 
-TIMEOUT=${TIMEOUT:-120}
-ROUNDS=${ROUNDS:-10}
+TIMEOUT=${TIMEOUT:-2000}
+ROUNDS=${ROUNDS:-200}
 MULTIPATH=${MULTIPATH:-0}
 
 function cleanup() {
