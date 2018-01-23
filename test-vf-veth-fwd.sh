@@ -13,3 +13,5 @@ FORCE_REP2=veth1
 . $my_dir/test-vf-vf-fwd.sh
 
 ip link del veth0 2>/dev/null
+
+test_done
