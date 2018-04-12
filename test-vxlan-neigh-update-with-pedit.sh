@@ -60,13 +60,13 @@ function neigh_update_test() {
         flower dst_mac ff:ff:ff:ff:ff:ff $flag \
         action tunnel_key set \
             id $id src_ip ${local_ip} dst_ip ${remote_ip} dst_port ${dst_port} \
-        action mirred egress redirect dev vxlan1
+        action mirred egress redirect dev vxlan1 || fail "Failed to add rule"
 
     tc_filter add dev $REP protocol arp parent ffff: prio 2\
         flower dst_mac $dst_mac $flag \
         action tunnel_key set \
             id $id src_ip ${local_ip} dst_ip ${remote_ip} dst_port ${dst_port} \
-        action mirred egress redirect dev vxlan1
+        action mirred egress redirect dev vxlan1 || fail "Failed to add rule"
 
     #
     # encap with header rewrite
@@ -83,7 +83,7 @@ function neigh_update_test() {
         action csum ip pipe \
         action tunnel_key set \
             id $id src_ip ${local_ip} dst_ip ${remote_ip} dst_port ${dst_port} \
-        action mirred egress redirect dev vxlan1
+        action mirred egress redirect dev vxlan1 || fail "Failed to add rule"
 
     # this rule should fail as we cannot change ttl in ip proto rule
     # but it reproduced a different error.
@@ -98,7 +98,7 @@ function neigh_update_test() {
         action csum ip pipe \
         action tunnel_key set \
             id $id src_ip ${local_ip} dst_ip ${remote_ip} dst_port ${dst_port} \
-        action mirred egress redirect dev vxlan1
+        action mirred egress redirect dev vxlan1 || fail "Failed to add rule"
 
 
     # tunnel key unset
@@ -108,13 +108,13 @@ function neigh_update_test() {
         flower $flag enc_src_ip ${remote_ip} enc_dst_ip ${local_ip} \
             enc_key_id $id enc_dst_port ${dst_port} \
         action tunnel_key unset \
-        action mirred egress redirect dev $REP
+        action mirred egress redirect dev $REP || fail "Failed to add rule"
 
     tc_filter add dev vxlan1 protocol arp parent ffff: prio 6\
         flower $flag enc_src_ip ${remote_ip} enc_dst_ip ${local_ip} \
         enc_key_id $id enc_dst_port ${dst_port} \
         action tunnel_key unset \
-        action mirred egress redirect dev $REP
+        action mirred egress redirect dev $REP || fail "Failed to add rule"
 
     # add change evets
     title "-- forcing addr change 1"
