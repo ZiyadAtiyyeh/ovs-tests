@@ -76,6 +76,8 @@ else
 fi
 
 start_clean_openvswitch
+ifconfig $VF up
+ifconfig $VF2 up
 config_vf ns0 $VF $REP $IP1
 config_vf ns1 $VF2 $REP2 $IP2
 
